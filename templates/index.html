@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Finances — Painel do Casal</title>
+<meta name="description" content="Gestão financeira compartilhada para casais: fundos, aportes, receitas e despesas em um dashboard dark premium." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/theme.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="topbar glass fade-in">
+    <div class="brand">
+      <div class="brand-mark">💜</div>
+      <div>
+        <div class="brand-title">Finances — Painel do Casal</div>
+        <div class="brand-sub">Fundos, aportes e o dia a dia financeiro de vocês dois</div>
+      </div>
+    </div>
+    <div class="period-filter" id="period-filter" role="tablist" aria-label="Filtro de período">
+      <button data-period="month" class="active">Mês Atual</button>
+      <button data-period="quarter">Trimestre</button>
+      <button data-period="year">Ano</button>
+      <button data-period="all">Tudo</button>
+    </div>
+    <button class="btn-primary" id="open-modal-btn">
+      <span aria-hidden="true">＋</span> Novo Lançamento
+    </button>
+  </header>
+
+  <section class="kpi-grid">
+    <div class="kpi-card glass fade-in" data-tone="income">
+      <div class="kpi-label"><span class="kpi-icon">💰</span> Renda Total do Mês</div>
+      <div class="kpi-value" id="kpi-income">R$ 0,00</div>
+      <div class="kpi-foot" id="kpi-income-foot">&nbsp;</div>
+    </div>
+    <div class="kpi-card glass fade-in" data-tone="expense">
+      <div class="kpi-label"><span class="kpi-icon">🧾</span> Gastos Totais</div>
+      <div class="kpi-value" id="kpi-expense">R$ 0,00</div>
+      <div class="kpi-foot" id="kpi-expense-foot">&nbsp;</div>
+    </div>
+    <div class="kpi-card glass fade-in" data-tone="funds">
+      <div class="kpi-label"><span class="kpi-icon">🏦</span> Total Aportado em Fundos</div>
+      <div class="kpi-value" id="kpi-contrib">R$ 0,00</div>
+      <div class="kpi-foot" id="kpi-contrib-foot">&nbsp;</div>
+    </div>
+    <div class="kpi-card glass fade-in" data-tone="free">
+      <div class="kpi-label"><span class="kpi-icon">✨</span> Saldo Livre Restante</div>
+      <div class="kpi-value" id="kpi-free">R$ 0,00</div>
+      <div class="kpi-foot" id="kpi-free-foot">&nbsp;</div>
+    </div>
+  </section>
+
+  <section class="grid-main">
+    <div class="panel glass fade-in">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Panorama Geral das Finanças</div>
+          <div class="panel-sub">Para onde o dinheiro do casal foi no período</div>
+        </div>
+      </div>
+      <div class="donut-wrap">
+        <div class="donut-canvas-box">
+          <canvas id="donut-chart" aria-label="Gráfico de rosca do panorama financeiro" role="img"></canvas>
+          <div class="donut-center">
+            <div class="value" id="donut-total">R$ 0</div>
+            <div class="label">movimentado</div>
+          </div>
+        </div>
+        <div class="legend" id="donut-legend"></div>
+      </div>
+    </div>
+
+    <div class="panel glass fade-in">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Fundos Financeiros do Casal</div>
+          <div class="panel-sub">Saldo acumulado vs. meta de cada pilar</div>
+        </div>
+      </div>
+      <div class="fund-grid" id="fund-grid"></div>
+    </div>
+  </section>
+
+  <section class="charts-row">
+    <div class="panel glass fade-in">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Ele vs Ela vs Ambos</div>
+          <div class="panel-sub">Quem paga o quê no período selecionado</div>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="payer-chart"></canvas></div>
+    </div>
+    <div class="panel glass fade-in">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Evolução do Patrimônio</div>
+          <div class="panel-sub">Saldo acumulado em fundos nos últimos 12 meses</div>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="evolution-chart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="panel glass fade-in">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Transações</div>
+        <div class="panel-sub">Busque, filtre e gerencie todos os lançamentos do casal</div>
+      </div>
+    </div>
+    <div class="table-toolbar">
+      <input type="search" class="search-input" id="search-input" placeholder="Buscar por descrição ou categoria..." />
+      <select class="select-input" id="filter-type">
+        <option value="">Todos os tipos</option>
+        <option value="income">Receitas</option>
+        <option value="expense">Gastos</option>
+        <option value="contribution">Aportes</option>
+      </select>
+      <select class="select-input" id="filter-fund">
+        <option value="">Todos os fundos</option>
+      </select>
+      <select class="select-input" id="filter-payer">
+        <option value="">Ele, Ela ou Ambos</option>
+        <option value="ele">Ele</option>
+        <option value="ela">Ela</option>
+        <option value="ambos">Ambos</option>
+      </select>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="transactions">
+        <thead>
+          <tr>
+            <th data-sort="date" class="sorted">Data</th>
+            <th data-sort="description">Descrição</th>
+            <th data-sort="category">Fundo / Categoria</th>
+            <th data-sort="payer">Pagador</th>
+            <th data-sort="amount" style="text-align:right;">Valor</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tx-tbody"></tbody>
+      </table>
+      <div class="empty-state hidden" id="tx-empty">Nenhum lançamento encontrado com esses filtros.</div>
+    </div>
+  </section>
+
+  <footer class="app-footer">Finances — feito com 💜 para a gestão financeira de vocês dois.</footer>
+</div>
+
+<!-- Modal: novo / editar lançamento -->
+<div class="modal-overlay" id="modal-overlay">
+  <form class="modal-card glass" id="tx-form" novalidate>
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">Novo Lançamento</div>
+      <button type="button" class="modal-close" id="modal-close" aria-label="Fechar">✕</button>
+    </div>
+
+    <input type="hidden" id="tx-id" />
+
+    <div class="type-toggle" id="type-toggle">
+      <button type="button" data-type="income" class="active">💰 Receita</button>
+      <button type="button" data-type="expense">🧾 Gasto</button>
+      <button type="button" data-type="contribution">🏦 Aporte</button>
+    </div>
+
+    <div class="field">
+      <label for="tx-description">Descrição</label>
+      <input id="tx-description" type="text" maxlength="120" placeholder="Ex: Mercado do mês" required />
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="tx-amount">Valor (R$)</label>
+        <input id="tx-amount" type="number" step="0.01" min="0.01" placeholder="0,00" required />
+      </div>
+      <div class="field">
+        <label for="tx-date">Data</label>
+        <input id="tx-date" type="date" required />
+      </div>
+    </div>
+
+    <div class="field" id="fund-field">
+      <label for="tx-fund">Fundo</label>
+      <select id="tx-fund"></select>
+    </div>
+
+    <div class="field" id="category-field">
+      <label for="tx-category">Categoria</label>
+      <input id="tx-category" type="text" maxlength="60" placeholder="Ex: mercado, luz, internet..." />
+    </div>
+
+    <div class="field">
+      <label>Quem pagou?</label>
+      <div class="payer-toggle" id="payer-toggle">
+        <button type="button" data-payer="ele">Ele</button>
+        <button type="button" data-payer="ela">Ela</button>
+        <button type="button" data-payer="ambos" class="active">Ambos (50/50)</button>
+      </div>
+    </div>
+
+    <div class="field-error" id="form-error"></div>
+    <button type="submit" class="modal-submit" id="modal-submit">Salvar Lançamento</button>
+  </form>
+</div>
+
+<div class="toast-stack" id="toast-stack"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
