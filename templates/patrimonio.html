@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Patrimônio · Finances</title>
+<meta name="description" content="Patrimônio acumulado do casal com juros compostos de 12% ao ano e projeção." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/theme.css" />
+<link rel="stylesheet" href="/static/css/pages.css" />
+<script src="/static/vendor/chart.umd.js"></script>
+</head>
+<body>
+<div class="layout">
+  <aside id="sidebar"></aside>
+  <div class="content-area">
+    <div class="app-shell">
+      <header class="page-head">
+        <div>
+          <div class="page-eyebrow">Acumulação & Projeção</div>
+          <h1 class="page-title">Patrimônio do Casal</h1>
+          <p class="page-desc">Todo o dinheiro guardado em fundos e reservas, capitalizado a juros compostos. A taxa anual é convertida em taxa mensal equivalente: i<sub>m</sub> = (1 + i<sub>a</sub>)<sup>1/12</sup> − 1.</p>
+        </div>
+        <div class="page-tools">
+          <select class="select-input" id="p-rate">
+            <option value="0.08">8% a.a.</option>
+            <option value="0.10">10% a.a.</option>
+            <option value="0.12" selected>12% a.a.</option>
+            <option value="0.15">15% a.a.</option>
+          </select>
+          <div class="segmented" id="p-view">
+            <button data-view="months" class="active">Meses</button>
+            <button data-view="bimesters">Bimestres</button>
+            <button data-view="years">Anos</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="section-gap">
+        <div class="stat-grid">
+          <div class="stat-card tone-emerald">
+            <div class="stat-label">💎 Patrimônio atual</div>
+            <div class="stat-value" id="p-balance">—</div>
+            <div class="stat-foot" id="p-balance-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-blue">
+            <div class="stat-label">📥 Total aportado</div>
+            <div class="stat-value" id="p-contributed">—</div>
+            <div class="stat-foot" id="p-contributed-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-violet">
+            <div class="stat-label">⚡ Juros acumulados</div>
+            <div class="stat-value" id="p-interest">—</div>
+            <div class="stat-foot" id="p-interest-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-amber">
+            <div class="stat-label">🪙 Renda passiva estimada</div>
+            <div class="stat-value" id="p-passive">—</div>
+            <div class="stat-foot" id="p-passive-foot">&nbsp;</div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Curva de acumulação</div>
+              <div class="panel-sub" id="p-chart-sub">Linha cheia = histórico real · Linha tracejada = projeção mantendo o aporte médio atual</div>
+            </div>
+            <div class="legend-inline">
+              <span><i style="background:var(--emerald)"></i> Patrimônio</span>
+              <span><i style="background:var(--blue)"></i> Aportado</span>
+              <span><i style="background:var(--violet)"></i> Juros</span>
+            </div>
+          </div>
+          <div class="chart-box tall"><canvas id="p-chart"></canvas></div>
+        </div>
+
+        <div class="two-col wide-right">
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Independência financeira</div>
+                <div class="panel-sub">Patrimônio necessário para que os rendimentos cubram o custo essencial</div>
+              </div>
+            </div>
+            <div id="p-fi"></div>
+          </div>
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Projeção por horizonte</div>
+                <div class="panel-sub">Mantendo o aporte médio dos últimos 6 meses</div>
+              </div>
+            </div>
+            <div class="milestone-grid" id="p-milestones"></div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Tabela de evolução</div>
+              <div class="panel-sub">Do mais recente para o mais antigo · linhas em itálico são projeções</div>
+            </div>
+            <div class="segmented" id="p-scope">
+              <button data-scope="history" class="active">Histórico</button>
+              <button data-scope="projection">Projeção</button>
+              <button data-scope="all">Tudo</button>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table timeline-table">
+              <thead><tr>
+                <th>Período</th>
+                <th class="num">Aporte líquido</th>
+                <th class="num">Total aportado</th>
+                <th class="num">Juros acumulados</th>
+                <th class="num">Patrimônio</th>
+                <th>Composição</th>
+              </tr></thead>
+              <tbody id="p-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast-stack" id="toast-stack"></div>
+<script src="/static/js/core.js"></script>
+<script src="/static/js/patrimonio.js"></script>
+</body>
+</html>

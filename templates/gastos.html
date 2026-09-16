@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gastos · Finances</title>
+<meta name="description" content="Orçado vs realizado das despesas do casal, com projeção e análise de comprometimento da renda." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/theme.css" />
+<link rel="stylesheet" href="/static/css/pages.css" />
+<script src="/static/vendor/chart.umd.js"></script>
+</head>
+<body>
+<div class="layout">
+  <aside id="sidebar"></aside>
+  <div class="content-area">
+    <div class="app-shell">
+      <header class="page-head">
+        <div>
+          <div class="page-eyebrow">Controle Orçamentário</div>
+          <h1 class="page-title">Gastos do Casal</h1>
+          <p class="page-desc">Orçado × realizado por categoria, despesas fixas e variáveis, projeção de fechamento do mês e quanto da renda está comprometida.</p>
+        </div>
+        <div class="page-tools">
+          <span class="range-hint" data-range-hint></span>
+          <div data-period-filter></div>
+        </div>
+      </header>
+
+      <section class="section-gap">
+        <div class="stat-grid">
+          <div class="stat-card tone-blue">
+            <div class="stat-label">📋 Orçado no período</div>
+            <div class="stat-value" id="g-planned">—</div>
+            <div class="stat-foot" id="g-planned-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-pink">
+            <div class="stat-label">🧾 Realizado</div>
+            <div class="stat-value" id="g-actual">—</div>
+            <div class="stat-foot" id="g-actual-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-emerald">
+            <div class="stat-label">📊 Resultado vs orçamento</div>
+            <div class="stat-value" id="g-diff">—</div>
+            <div class="stat-foot" id="g-diff-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-amber">
+            <div class="stat-label">⚖️ Comprometimento da renda</div>
+            <div class="stat-value" id="g-commitment">—</div>
+            <div class="stat-foot" id="g-commitment-foot">&nbsp;</div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Leitura do contador</div>
+              <div class="panel-sub">Diagnóstico automático do período com base no plano de contas</div>
+            </div>
+          </div>
+          <div class="insight-list" id="g-insights"></div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Orçado × Realizado por categoria</div>
+              <div class="panel-sub">Verde = sobrou orçamento · Âmbar = no limite · Vermelho = estourou</div>
+            </div>
+            <div class="legend-inline">
+              <span><i style="background:var(--emerald)"></i> até 85%</span>
+              <span><i style="background:var(--amber)"></i> 85–100%</span>
+              <span><i style="background:var(--rose)"></i> acima de 100%</span>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead><tr>
+                <th>Categoria</th>
+                <th>Natureza</th>
+                <th class="num">Orçado</th>
+                <th class="num">Realizado</th>
+                <th class="num">Diferença</th>
+                <th style="width:150px;">Consumo</th>
+                <th>Status</th>
+              </tr></thead>
+              <tbody id="g-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="two-col wide-left">
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Histórico mensal</div>
+                <div class="panel-sub">Despesas correntes realizadas vs. orçamento mensal</div>
+              </div>
+            </div>
+            <div class="chart-box"><canvas id="g-history"></canvas></div>
+          </div>
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Composição dos gastos</div>
+                <div class="panel-sub">Fixas × variáveis e essencial × supérfluo</div>
+              </div>
+            </div>
+            <div class="chart-box"><canvas id="g-nature"></canvas></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Maiores gastos do período</div>
+                <div class="panel-sub">Onde concentrou o desembolso</div>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead><tr><th>Descrição</th><th>Conta</th><th>Pagador</th><th class="num">Valor</th></tr></thead>
+                <tbody id="g-top"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Uso de fundos e reservas</div>
+                <div class="panel-sub">Gastos pagos com dinheiro carimbado — não consomem o orçamento corrente</div>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead><tr><th>Envelope</th><th>Tipo</th><th class="num">Utilizado</th></tr></thead>
+                <tbody id="g-envelopes"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast-stack" id="toast-stack"></div>
+<script src="/static/js/core.js"></script>
+<script src="/static/js/gastos.js"></script>
+</body>
+</html>

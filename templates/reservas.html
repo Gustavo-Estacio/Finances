@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reservas · Finances</title>
+<meta name="description" content="Reservas do casal: emergência, reforma, saúde, estudos, carro e paisagismo." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/theme.css" />
+<link rel="stylesheet" href="/static/css/pages.css" />
+<script src="/static/vendor/chart.umd.js"></script>
+</head>
+<body>
+<div class="layout">
+  <aside id="sidebar"></aside>
+  <div class="content-area">
+    <div class="app-shell">
+      <header class="page-head">
+        <div>
+          <div class="page-eyebrow">Segurança Financeira</div>
+          <h1 class="page-title">Reservas do Casal</h1>
+          <p class="page-desc">Cada reserva tem meta, aporte sugerido e prazo. A reserva de emergência é calculada em meses de custo de vida essencial — o padrão contábil para casais com renda estável é de 6 meses.</p>
+        </div>
+        <div class="page-tools">
+          <span class="range-hint" data-range-hint></span>
+          <div data-period-filter></div>
+        </div>
+      </header>
+
+      <section class="section-gap">
+        <div class="stat-grid">
+          <div class="stat-card tone-amber">
+            <div class="stat-label">🛟 Total reservado</div>
+            <div class="stat-value" id="r-total">—</div>
+            <div class="stat-foot" id="r-total-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-violet">
+            <div class="stat-label">🎯 Cobertura das metas</div>
+            <div class="stat-value" id="r-coverage">—</div>
+            <div class="stat-foot" id="r-coverage-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-sky">
+            <div class="stat-label">🚨 Emergência</div>
+            <div class="stat-value" id="r-emergency">—</div>
+            <div class="stat-foot" id="r-emergency-foot">&nbsp;</div>
+          </div>
+          <div class="stat-card tone-emerald">
+            <div class="stat-label">📥 Aporte mensal</div>
+            <div class="stat-value" id="r-monthly">—</div>
+            <div class="stat-foot" id="r-monthly-foot">&nbsp;</div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Diagnóstico das reservas</div>
+              <div class="panel-sub">Prioridade de aporte segundo a ordem clássica: emergência → objetivos de curto prazo → longo prazo</div>
+            </div>
+          </div>
+          <div class="insight-list" id="r-alerts"></div>
+        </div>
+
+        <div class="reserve-grid" id="r-grid"></div>
+
+        <div class="two-col wide-left">
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Evolução do saldo reservado</div>
+                <div class="panel-sub">Soma de todas as reservas nos últimos 12 meses</div>
+              </div>
+            </div>
+            <div class="chart-box"><canvas id="r-history"></canvas></div>
+          </div>
+          <div class="panel glass">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Plano de aportes</div>
+                <div class="panel-sub">Quanto falta e o aporte mensal para bater a meta no prazo</div>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead><tr><th>Reserva</th><th class="num">Falta</th><th class="num">Sugerido/mês</th><th class="num">Atual/mês</th><th>Prazo</th></tr></thead>
+                <tbody id="r-plan"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toast-stack" id="toast-stack"></div>
+<script src="/static/js/core.js"></script>
+<script src="/static/js/reservas.js"></script>
+</body>
+</html>

@@ -343,9 +343,12 @@ a { color: inherit; }
 .fund-name { font-weight: 700; font-size: 0.88rem; }
 .fund-sub { font-size: 0.72rem; color: var(--text-2); }
 
-.fund-amounts { display: flex; justify-content: space-between; align-items: baseline; margin: 10px 0 8px; }
+.fund-amounts {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 10px; flex-wrap: wrap; margin: 10px 0 8px;
+}
 .fund-balance { font-size: 1.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
-.fund-goal { font-size: 0.74rem; color: var(--text-2); }
+.fund-goal { font-size: 0.74rem; color: var(--text-2); white-space: nowrap; }
 
 .progress-track {
   height: 8px;
@@ -451,6 +454,7 @@ table.transactions td { padding: 12px; vertical-align: middle; }
 .amount-cell { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
 .amount-cell.positive { color: var(--emerald); }
 .amount-cell.negative { color: var(--pink); }
+.amount-cell.neutral { color: var(--blue); }
 
 .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
 .icon-btn {
